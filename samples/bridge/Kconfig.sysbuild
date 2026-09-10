@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
 
+config MATTER_ADD_ON
+	default y
+
 #### Radio core
 config NRF_DEFAULT_IPC_RADIO
 	default y

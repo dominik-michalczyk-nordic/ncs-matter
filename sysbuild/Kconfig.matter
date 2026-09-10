@@ -4,7 +4,6 @@
 
 menuconfig MATTER_ADD_ON
 	bool "Matter"
-	default y
 	depends on ZEPHYR_CONNECTEDHOMEIP_MODULE
 
 if MATTER_ADD_ON
