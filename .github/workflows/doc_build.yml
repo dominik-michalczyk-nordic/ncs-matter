@@ -72,10 +72,23 @@ jobs:
       - name: Check version
         run: |
           VERSION_REGEX="^v([0-9a-zA-Z\.\-]+)$"
-          if [[ ${GITHUB_REF#refs/tags/} =~ $VERSION_REGEX ]]; then
-            VERSION=${BASH_REMATCH[1]}
-          elif [[ ${GITHUB_REF#refs/heads/} == "main" ]]; then
-            VERSION="latest"
+          PREVIEW_TAG_REGEX="^preview([a-zA-Z0-9\.\-]*)$"
+          PREVIEW_BRANCH_REGEX="^preview-(.+)-branch$"
+
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            REF_NAME="${GITHUB_REF#refs/tags/}"
+            if [[ ${REF_NAME} =~ $VERSION_REGEX ]]; then
+              VERSION=${BASH_REMATCH[1]}
+            elif [[ ${REF_NAME} =~ $PREVIEW_TAG_REGEX ]]; then
+              VERSION=${REF_NAME}
+            fi
+          elif [[ "${GITHUB_REF}" == refs/heads/* ]]; then
+            REF_NAME="${GITHUB_REF#refs/heads/}"
+            if [[ ${REF_NAME} == "main" ]]; then
+              VERSION="latest"
+            elif [[ ${REF_NAME} =~ $PREVIEW_BRANCH_REGEX ]]; then
+              VERSION=${REF_NAME}
+            fi
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             VERSION="pr-${{ github.event.number }}"
           fi
