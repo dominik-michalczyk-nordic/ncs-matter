@@ -18,6 +18,8 @@
 .. _`Software maturity levels`: https://docs.nordicsemi.com/bundle/ncs-|ncs_version|/page/nrf/releases_and_maturity/software_maturity.html
 .. _`nRF Connect SDK v3.4.0 release notes`: https://docs.nordicsemi.com/bundle/ncs-|ncs_version|/page/nrf/releases_and_maturity/releases/release-notes-3.4.0.html
 .. _`Migration Partitions from PM`: https://docs.nordicsemi.com/bundle/ncs-|ncs_version|/page/nrf/releases_and_maturity/migration/migration_partitions.html
+.. _`Thread tools`: https://docs.nordicsemi.com/bundle/ncs-|ncs_version|/page/nrf/protocols/thread/tools.html
+.. _`Thread tools - Thread Border Router`: https://docs.nordicsemi.com/bundle/ncs-|ncs_version|/page/nrf/protocols/thread/tools.html#thread-border-router
 
 .. ### NCS Zephyr documentation set
 
@@ -37,6 +39,7 @@
 .. _Bluetooth LE Arbiter's header file: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/src/platform/Zephyr/BLEAdvertisingArbiter.h
 .. _Bluetooth SIG's Qualification Process: https://www.bluetooth.com/develop-with-bluetooth/qualify/
 .. _CHIP Certificate Tool source files: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/src/tools
+.. _CHIP Tool Guide: https://project-chip.github.io/connectedhomeip-doc/development_controllers/chip-tool/chip_tool_guide.html
 .. _CONFIG_BT_CTLR_TX_PWR_MINUS: https://nrfconnectdocs.nordicsemi.com/ncs/latest/kconfig/index.html#!CONFIG_BT_CTLR_TX_PWR_MINUS
 .. _CONFIG_BT_CTLR_TX_PWR_PLUS: https://nrfconnectdocs.nordicsemi.com/ncs/latest/kconfig/index.html#!CONFIG_BT_CTLR_TX_PWR_PLUS
 .. _CSA Certified Products Database: https://csa-iot.org/csa-iot_products/
@@ -85,12 +88,12 @@
 .. _Matter nRF Connect scripts: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/scripts/tools/nrfconnect
 .. _Nordic Developer Academy: https://academy.nordicsemi.com/
 .. _Online Power Profiler for Matter over Thread: https://devzone.nordicsemi.com/power/w/opp/16/online-power-profiler-for-matter-over-thread
+.. _OTA Provider for Linux: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/examples/ota-provider-app/linux
 .. _PHP JSON Schema: https://github.com/swaggest/php-json-schema
 .. _PICS Tool: https://picstool.csa-iot.org/
 .. _Platform Security Architecture (PSA): https://www.psacertified.org/what-is-psa-certified/
 .. _SIGMA: https://link.springer.com/chapter/10.1007/978-3-540-45146-4_24
 .. _SPAKE2+: https://datatracker.ietf.org/doc/rfc9383/
-.. _SPAKE2+ Python Tool page: https://project-chip.github.io/connectedhomeip-doc/scripts/tools/spake2p/README.html
 .. _Testing the nRF Connect platform with Apple, Google and Samsung ecosystems: https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/matter-testing-nrf-connect-sdk-platform-with-apple-google-and-samsung-ecosystems-218911247#mcetoc_1gkq24ojdf
 .. _Testing with Apple Devices: https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/darwin.md
 .. _Thread Group's certification information: https://www.threadgroup.org/What-is-Thread/Certification

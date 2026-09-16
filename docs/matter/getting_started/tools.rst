@@ -126,8 +126,12 @@ Alternatively, you can use the :ref:`nRF Matter for Mobile app <ug_matter_gs_too
 CHIP Tool for Linux or macOS
 ============================
 
-The CHIP Tool for Linux or macOS is the default implementation of the Matter controller role, recommended for the nRF Connect platform.
-You can read more about it on the :doc:`matter:chip_tool_guide` page in the Matter documentation.
+The CHIP Tool for Linux or macOS is the default implementation of the Matter controller role, recommended for testing with the nRF Connect platform.
+You can read more about it on the `CHIP Tool Guide`_ page in the Matter documentation.
+
+.. note::
+   The CHIP Tool is recommended for testing and development purposes only.
+   Do not use it in products.
 
 Depending on your system, you can install the CHIP Tool in one of the following ways:
 
@@ -420,7 +424,7 @@ CHIP Certificate Tool
 *********************
 
 Matter's CHIP Certificate Tool, in short chip-cert, is a command-line utility tool for generating and editing Matter certificates such as Certificate Declarations (CD), Device Attestation Certificates (DAC), Product Attestation Intermediate (PAI) certificates, and Product Attestation Authority (PAA) certificate, alongside their related keys.
-You can use it for integration testing purposes while working on a :ref:`Matter end product <ug_matter_intro_device>`.
+You can use it for testing and development purposes.
 
 For more information about the chip-cert tool, see how to :ref:`generate custom certification declarations <ug_matter_device_configuring_cd_generating_steps>` for integration testing in the |NCS|.
 You can also take a look at the `CHIP Certificate Tool source files`_.
@@ -449,32 +453,36 @@ This lets you for example change the test Vendor ID, Product ID, or other data.
 
 To build a Matter application in the |NCS| with custom certification data, make sure to set the :kconfig:option:`CONFIG_CHIP_FACTORY_DATA_USE_DEFAULT_CERTS` to ``n`` when :doc:`building an example with factory data <matter:nrfconnect_factory_data_configuration>`.
 
-.. _ug_matter_gs_tools_spake2:
+.. _ug_matter_gs_tools_ota_provider:
 
-SPAKE2+ Python tool
-*******************
+OTA Provider tool
+*****************
 
-SPAKE2+ Python Tool is a Python script for generating SPAKE2+ protocol parameters.
-The protocol is used during Matter commissioning to :ref:`establish a secure session <ug_matter_overview_commissioning_stages_case>` between the commissioner and the commissionee.
+The `OTA Provider for Linux`_ tool is an example implementation of the :ref:`OTA Provider <ug_matter_overview_dfu_roles>` role available for the Linux OS.
+It responds to queries from OTA Requestor devices and serves Matter OTA software update images over the Matter operational network.
+
+You can use the OTA Provider application to test Device Firmware Upgrade (DFU) over Matter with :ref:`matter_samples` and other Matter applications built with the |NCS|.
 
 .. note::
-   Currently, the tool only supports generating Verifier parameters.
+   The OTA Provider application is recommended for testing and development purposes only.
+   Do not use it in products.
 
-For usage examples, see the `SPAKE2+ Python Tool page`_ in the Matter SDK official documentation.
+You can build the OTA Provider manually from the source files or download a prebuilt tool package from the `Matter nRF Connect releases`_ GitHub page.
+For detailed step-by-step instructions on testing DFU over Matter, see the `Matter software update guide`_.
 
 .. _ug_matter_gs_tools_mot:
 
 Matter over Thread tools
 ************************
 
-You can use the following :ref:`ug_thread_tools` when working with Matter in the |NCS| using the Matter over Thread setup.
+You can use the following `Thread tools`_ when working with Matter in the |NCS| using the Matter over Thread setup.
 
 Thread Border Router
 ====================
 
 The Thread Border Router provides connectivity from the IEEE 802.15.4 network to adjacent networks on other physical layers (such as Wi-Fi® or Ethernet).
 
-See :ref:`ug_thread_tools_tbr` for configuration instructions.
+See `Thread tools - Thread Border Router`_ for configuration instructions.
 
 nRF Sniffer for 802.15.4
 ========================
