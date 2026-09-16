@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - 'v*-branch'
+      - 'preview-*-branch'
     paths:
       - '.github/doc-addon.env'
       - '.github/actions/load-doc-config/**'
@@ -21,8 +22,10 @@ on:
     branches:
       - main
       - 'v*-branch'
+      - 'preview-*-branch'
     tags:
       - v*
+      - preview*
 
 env:
   DOXYGEN_VERSION: 1.12.0
