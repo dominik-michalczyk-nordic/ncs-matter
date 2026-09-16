@@ -34,10 +34,14 @@ jobs:
       - name: Unzip html archive
         working-directory: docs
         run: |
-          OUTDIR=$(awk 'NR==1 { if ($3 ~ /^(latest|PR-[0-9]+|[0-9]+\.[0-9a-zA-Z\.\-]+)$/) print $3 }' monitor_*.txt)
+          OUTDIR=$(awk 'NR==1 { if ($3 ~ /^(latest|PR-[0-9]+|[0-9]+\.[0-9a-zA-Z\.\-]+|preview[a-zA-Z0-9\.\-]*|preview-[a-zA-Z0-9\.\-]+-branch)$/) print $3 }' monitor_*.txt)
+          if [ -z "${OUTDIR}" ]; then
+            echo "Could not determine output directory from monitor file"
+            exit 1
+          fi
           echo "OUTDIR=$OUTDIR" >> "$GITHUB_ENV"
-          unzip ${{ env.DOC_ADDON_NAME }}*.zip -d $OUTDIR
-          find "$OUTDIR" -type l -delete
+          unzip ${{ env.DOC_ADDON_NAME }}*.zip -d "${OUTDIR}"
+          find "${OUTDIR}" -type l -delete
 
       - name: Obtain PR number
         if: ${{ github.event.workflow_run.event == 'pull_request' }}
@@ -56,9 +60,9 @@ jobs:
           NCS_DOC_SAS_MAIN: ${{ secrets.NCS_DOC_SAS_MAIN }}
         run: |
           if [[ "${{ github.event.workflow_run.event }}" == "pull_request" ]]; then
-            azcopy cp $OUTDIR "${{ vars.NCS_DOC_PR_STORAGE_URL }}addons/${{ env.DOC_ADDON_NAME }}?$NCS_DOC_SAS_PRS" --recursive=true
+            azcopy cp "${OUTDIR}" "${{ vars.NCS_DOC_PR_STORAGE_URL }}addons/${{ env.DOC_ADDON_NAME }}?$NCS_DOC_SAS_PRS" --recursive=true
           elif [[ "${{ github.event.workflow_run.head_repository.full_name }}" == "${{ github.repository }}" ]]; then
-            azcopy cp $OUTDIR "${{ vars.NCS_DOC_STORAGE_URL }}addons/${{ env.DOC_ADDON_NAME }}?$NCS_DOC_SAS_MAIN" --recursive=true
+            azcopy cp "${OUTDIR}" "${{ vars.NCS_DOC_STORAGE_URL }}addons/${{ env.DOC_ADDON_NAME }}?$NCS_DOC_SAS_MAIN" --recursive=true
           else
             echo "Skipping main-branch upload from untrusted repository: ${{ github.event.workflow_run.head_repository.full_name }}"
           fi
