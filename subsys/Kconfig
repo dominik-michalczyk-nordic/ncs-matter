@@ -147,6 +147,15 @@ config MATTER_ZAP_GENERATION_STATIC
 	bool "Use pre-generated ZAP artifacts"
 endchoice
 
+config MATTER_ZAP_CLI_INSTALL_PATH
+	string "Path to directory containing zap-cli"
+	default ""
+	depends on MATTER_ZAP_GENERATION_BUILD_TIME
+	help
+	  Optional path to a preinstalled ZAP package directory that contains the
+	  zap-cli binary. When empty, the build automatically installs ZAP into
+	  the Matter SDK .zap-install directory before running code generation.
+
 rsource "persistent_storage/Kconfig"
 rsource "watchdog/Kconfig"
 rsource "diagnostic/Kconfig"
