@@ -21,3 +21,5 @@ __pycache__/
 
 # Generated at build time or by west zap-generate
 /samples/**/zap-generated/
+!/samples/manufacturer_specific/**/zap-generated/
+!/samples/manufacturer_specific/**/zap-generated/**
