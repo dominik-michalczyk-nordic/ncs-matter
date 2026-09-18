@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
 
-# chip_data_model_static.cmake resolves paths from CHIP_ROOT at include time.
 if(NOT CHIP_ROOT)
   set(CHIP_ROOT ${ZEPHYR_CONNECTEDHOMEIP_MODULE_DIR})
 endif()
@@ -12,7 +11,7 @@ endif()
 if(CONFIG_MATTER_ZAP_GENERATION_BUILD_TIME)
   include(${ZEPHYR_CONNECTEDHOMEIP_MODULE_DIR}/src/app/chip_data_model.cmake)
 elseif(CONFIG_MATTER_ZAP_GENERATION_STATIC)
-  include(${ZEPHYR_CONNECTEDHOMEIP_MODULE_DIR}/src/app/chip_data_model_static.cmake)
+  include(${CMAKE_CURRENT_LIST_DIR}/chip_data_model_static.cmake)
 endif()
 
 function(ncs_configure_data_model)
