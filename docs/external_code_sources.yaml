@@ -1,0 +1,101 @@
+# Registry for :external:c:*:, :externa:c:*:, and :external:file: Sphinx roles.
+#
+# Each symbol or file must declare a registered "source". Sources with a base_url
+# produce versioned external links on GitHub or Nordic docs.
+#
+# {ncs_matter_revision} resolves from the current git checkout:
+# main on main, PR head SHA in pull_request CI, release tag on tagged builds,
+# otherwise the short HEAD SHA, with v{addon_version} as fallback.
+
+sources:
+  ncs_matter:
+    base_url: https://github.com/nrfconnect/ncs-matter/blob/{ncs_matter_revision}/
+  sdk_nrf:
+    base_url: https://github.com/nrfconnect/sdk-nrf/blob/v{ncs_version}/
+  sdk_connectedhomeip:
+    base_url: https://github.com/nrfconnect/sdk-connectedhomeip/blob/{sdk_connectedhomeip_revision}/
+  zephyr_doxygen:
+    base_url: https://docs.nordicsemi.com/bundle/ncs-{ncs_version}/page/zephyr/doxygen/html/
+  local:
+    base_url: https://github.com/nrfconnect/ncs-matter/blob/{ncs_matter_revision}/
+
+symbols:
+  struct:
+    bt_uuid:
+      source: zephyr_doxygen
+      path: structbt__uuid.html
+    BLEBridgedDeviceProvider:
+      source: local
+      path: samples/bridge/src/ble/data_providers/ble_bridged_device.h
+    BridgedDeviceDataProvider:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+    MyBtServiceDataProvider:
+      source: local
+    BleBridgedDeviceFactory:
+      source: local
+      path: samples/bridge/src/ble/ble_bridged_device_factory.h
+  func:
+    Init:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+    NotifyUpdateState:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+    UpdateState:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+    GetServiceUuid:
+      source: local
+      path: samples/bridge/src/ble/data_providers/ble_bridged_device.h
+    ParseDiscoveredData:
+      source: local
+      path: samples/bridge/src/ble/data_providers/ble_bridged_device.h
+    GetDataProviderFactory:
+      source: local
+      path: samples/bridge/src/ble/ble_bridged_device_factory.cpp
+    MatterDeviceTypeToBleService:
+      source: local
+      path: samples/bridge/src/ble/ble_bridged_device_factory.cpp
+    BleServiceToMatterDeviceType:
+      source: local
+      path: samples/bridge/src/ble/ble_bridged_device_factory.cpp
+  var:
+    sUuidServices:
+      source: local
+      path: samples/bridge/src/app_task.cpp
+    clusterId:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+    attributeId:
+      source: local
+      path: samples/bridge/src/core/bridged_device_data_provider.h
+  enum:
+    ServiceUuid:
+      source: local
+      path: samples/bridge/src/ble/ble_bridged_device_factory.h
+
+files:
+  samples/bridge/src/ble/data_providers/ble_bridged_device.h:
+    source: local
+  app_task.cpp:
+    source: local
+    path: samples/bridge/src/app_task.cpp
+  src/ble/data_providers:
+    source: local
+    url: https://github.com/nrfconnect/ncs-matter/tree/{ncs_matter_revision}/samples/bridge/src/ble/data_providers
+  src/ble/ble_bridged_device_factory.h:
+    source: local
+    path: samples/bridge/src/ble/ble_bridged_device_factory.h
+  src/ble/ble_bridged_device_factory.cpp:
+    source: local
+    path: samples/bridge/src/ble/ble_bridged_device_factory.cpp
+  ble_bridged_device_factory.h:
+    source: local
+    path: samples/bridge/src/ble/ble_bridged_device_factory.h
+  ble_bridged_device_factory.cpp:
+    source: local
+    path: samples/bridge/src/ble/ble_bridged_device_factory.cpp
+  CMakeLists.txt:
+    source: local
+    path: samples/bridge/CMakeLists.txt

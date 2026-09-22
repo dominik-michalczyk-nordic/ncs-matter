@@ -36,9 +36,9 @@
 
 .. ### Matter documentation backtick links (from sdk-nrf links.txt)
 
-.. _Bluetooth LE Arbiter's header file: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/src/platform/Zephyr/BLEAdvertisingArbiter.h
+.. _Bluetooth LE Arbiter's header file: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/src/platform/Zephyr/BLEAdvertisingArbiter.h
 .. _Bluetooth SIG's Qualification Process: https://www.bluetooth.com/develop-with-bluetooth/qualify/
-.. _CHIP Certificate Tool source files: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/src/tools
+.. _CHIP Certificate Tool source files: https://github.com/nrfconnect/sdk-connectedhomeip/tree/|sdk-connectedhomeip-revision|/src/tools
 .. _CHIP Tool Guide: https://project-chip.github.io/connectedhomeip-doc/development_controllers/chip-tool/chip_tool_guide.html
 .. _CONFIG_BT_CTLR_TX_PWR_MINUS: https://nrfconnectdocs.nordicsemi.com/ncs/latest/kconfig/index.html#!CONFIG_BT_CTLR_TX_PWR_MINUS
 .. _CONFIG_BT_CTLR_TX_PWR_PLUS: https://nrfconnectdocs.nordicsemi.com/ncs/latest/kconfig/index.html#!CONFIG_BT_CTLR_TX_PWR_PLUS
@@ -56,20 +56,20 @@
 .. _Developing Matter 1.0 products with nRF Connect SDK: https://www.youtube.com/watch?v=9Ar13rMxGIk
 .. _Distributed Compliance Ledger: https://webui.dcl.csa-iot.org/
 .. _Electrical specification for nRF7002: https://docs.nordicsemi.com/bundle/ps_nrf7002/page/chapters/elspec/doc/electrical_specification.html
-.. _Factory Data Provider: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/src/platform/nrfconnect/FactoryDataProvider.h
-.. _Factory data schema: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/scripts/tools/nrfconnect/nrfconnect_factory_data.schema
+.. _Factory Data Provider: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/src/platform/nrfconnect/FactoryDataProvider.h
+.. _Factory data schema: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/scripts/tools/nrfconnect/nrfconnect_factory_data.schema
 .. _Fprotect: https://nrfconnectdocs.nordicsemi.com/ncs/latest/nrf/libraries/security/bootloader/fprotect.html
 .. _GN: https://gn.googlesource.com/gn/
 .. _GN website: https://gn.googlesource.com/gn/#getting-a-binary
-.. _Generate factory data script: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/scripts/tools/nrfconnect/generate_nrfconnect_chip_factory_data.py
-.. _Generate partition script: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/scripts/tools/nrfconnect/nrfconnect_generate_partition.py
+.. _Generate factory data script: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/scripts/tools/nrfconnect/generate_nrfconnect_chip_factory_data.py
+.. _Generate partition script: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/scripts/tools/nrfconnect/nrfconnect_generate_partition.py
 .. _ISO 8601 date format: https://www.iso.org/iso-8601-date-and-time-format.html
 .. _JSON Schema: https://json-schema.org/understanding-json-schema/reference
 .. _JSON Schema Validator: https://www.jsonschemavalidator.net
 .. _Join Bluetooth SIG: https://www.bluetooth.com/develop-with-bluetooth/join/
 .. _Join CSA: https://csa-iot.org/become-member/
 .. _Join Wi-Fi Alliance: https://www.wi-fi.org/membership
-.. _LogModule enumeration: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/src/lib/support/logging/Constants.h
+.. _LogModule enumeration: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/src/lib/support/logging/Constants.h
 .. _Matter Attestation Form: https://groups.csa-iot.org/wg/members-all/document/folder/2255
 .. _Matter Attestation of Security template: https://groups.csa-iot.org/wg/members-all/document/27432
 .. _Matter Cluster Editor app: https://docs.nordicsemi.com/bundle/swtools_docs/page/app/pc-nrfconnect-matter-cluster-editor/index.html
@@ -83,12 +83,12 @@
 .. _Matter Simple Setup: https://developer.amazon.com/docs/frustration-free-setup/matter-simple-setup-getting-started.html
 .. _Matter Simple Setup for Thread Overview: https://developer.amazon.com/docs/frustration-free-setup/matter-simple-setup-for-thread-overview.html
 .. _Matter factory data Kconfig options: https://nrfconnectdocs.nordicsemi.com/ncs/latest/kconfig/index.html#!CHIP_FACTORY_DATA
-.. _Matter nRF Connect Kconfig: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/config/nrfconnect/chip-module/Kconfig
-.. _Matter nRF Connect platform source files: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/src/platform/nrfconnect
-.. _Matter nRF Connect scripts: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/scripts/tools/nrfconnect
+.. _Matter nRF Connect Kconfig: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/config/nrfconnect/chip-module/Kconfig
+.. _Matter nRF Connect platform source files: https://github.com/nrfconnect/sdk-connectedhomeip/tree/|sdk-connectedhomeip-revision|/src/platform/nrfconnect
+.. _Matter nRF Connect scripts: https://github.com/nrfconnect/sdk-connectedhomeip/tree/|sdk-connectedhomeip-revision|/scripts/tools/nrfconnect
 .. _Nordic Developer Academy: https://academy.nordicsemi.com/
 .. _Online Power Profiler for Matter over Thread: https://devzone.nordicsemi.com/power/w/opp/16/online-power-profiler-for-matter-over-thread
-.. _OTA Provider for Linux: https://github.com/nrfconnect/sdk-connectedhomeip/blob/5e2e5a02d6/examples/ota-provider-app/linux
+.. _OTA Provider for Linux: https://github.com/nrfconnect/sdk-connectedhomeip/blob/|sdk-connectedhomeip-revision|/examples/ota-provider-app/linux
 .. _PHP JSON Schema: https://github.com/swaggest/php-json-schema
 .. _PICS Tool: https://picstool.csa-iot.org/
 .. _Platform Security Architecture (PSA): https://www.psacertified.org/what-is-psa-certified/
@@ -118,7 +118,7 @@
 .. _`Matter CIDs for nRF54L10`: https://docs.nordicsemi.com/bundle/comp_matrix_nrf54l10/page/COMP/nrf54l10/nrf54l10_matter_cids.html
 .. _`Matter CIDs for nRF5340`: https://docs.nordicsemi.com/bundle/comp_matrix_nrf5340/page/COMP/nrf5340/nrf5340_matter_cids.html
 .. _`Matter CIDs for nRF52840`: https://docs.nordicsemi.com/bundle/comp_matrix_nrf52840/page/COMP/nrf52840/nrf52840_matter_cids.html
-.. _other controller setups: https://github.com/nrfconnect/sdk-connectedhomeip/tree/5e2e5a02d6/src/controller
+.. _other controller setups: https://github.com/nrfconnect/sdk-connectedhomeip/tree/|sdk-connectedhomeip-revision|/src/controller
 .. _zcbor: https://github.com/NordicSemiconductor/zcbor
 
 .. ### Matter module/platform doc links (sdk-connectedhomeip)
