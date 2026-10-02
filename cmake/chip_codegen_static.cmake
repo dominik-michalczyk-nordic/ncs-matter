@@ -11,87 +11,87 @@
 #                  suitable to be added within a build target
 #
 function(chip_codegen TARGET_NAME)
-    cmake_parse_arguments(ARG
-         ""
-         "INPUT;GENERATOR;OUTPUT_PATH;OUTPUT_FILES"
-         "OUTPUTS"
-         ${ARGN}
+  cmake_parse_arguments(ARG
+    ""
+    "INPUT;GENERATOR;OUTPUT_PATH;OUTPUT_FILES"
+    "OUTPUTS"
+    ${ARGN}
+  )
+
+  set(CHIP_CODEGEN_PREGEN_DIR "" CACHE PATH "Pre-generated directory to use instead of compile-time code generation.")
+
+  # Python is required for code generation
+  find_package(Python3 REQUIRED)
+
+  # Output paths can contain placeholders such as
+  # {{defined_cluster_name}} or {{server_cluster_name}}
+  #
+  # This translates them to the actually fully expanded path.
+  execute_process(
+    COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/codegen_paths.py" "--idl" "${ARG_INPUT}" ${ARG_OUTPUTS}
+    OUTPUT_VARIABLE GENERATED_PATHS_OUT
+  )
+  string(REPLACE "\n" ";" GENERATED_PATHS "${GENERATED_PATHS_OUT}")
+
+  if("${CHIP_CODEGEN_PREGEN_DIR}" STREQUAL "")
+    set(GEN_FOLDER "${CMAKE_BINARY_DIR}/gen/${TARGET_NAME}/${ARG_GENERATOR}")
+
+    string(REPLACE ";" "\n" OUTPUT_AS_NEWLINES "${ARG_OUTPUTS}")
+
+    file(MAKE_DIRECTORY "${GEN_FOLDER}")
+    file(GENERATE
+      OUTPUT "${GEN_FOLDER}/expected.outputs"
+      CONTENT "${OUTPUT_AS_NEWLINES}"
     )
 
-    set(CHIP_CODEGEN_PREGEN_DIR "" CACHE PATH "Pre-generated directory to use instead of compile-time code generation.")
 
-    # Python is required for code generation
+    set(OUT_NAMES)
+    foreach(NAME IN LISTS GENERATED_PATHS)
+      list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
+    endforeach()
+
+    # Python is expected to be in the path
     find_package(Python3 REQUIRED)
-
-    # Output paths can contain placeholders such as
-    # {{defined_cluster_name}} or {{server_cluster_name}}
-    #
-    # This translates them to the actually fully expanded path.
-    execute_process(
-            COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/codegen_paths.py" "--idl" "${ARG_INPUT}" ${ARG_OUTPUTS}
-            OUTPUT_VARIABLE GENERATED_PATHS_OUT
+    add_custom_command(
+      OUTPUT ${OUT_NAMES}
+      COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/codegen.py"
+      ARGS "--generator" "${ARG_GENERATOR}"
+           "--output-dir" "${GEN_FOLDER}"
+           "--expected-outputs" "${GEN_FOLDER}/expected.outputs"
+           "${ARG_INPUT}"
+      DEPENDS
+        "${ARG_INPUT}"
+      VERBATIM
     )
-    string(REPLACE "\n" ";" GENERATED_PATHS "${GENERATED_PATHS_OUT}")
 
-    if("${CHIP_CODEGEN_PREGEN_DIR}" STREQUAL "")
-        set(GEN_FOLDER "${CMAKE_BINARY_DIR}/gen/${TARGET_NAME}/${ARG_GENERATOR}")
+    add_custom_target(${TARGET_NAME} DEPENDS "${OUT_NAMES}")
 
-        string(REPLACE ";" "\n" OUTPUT_AS_NEWLINES "${ARG_OUTPUTS}")
+    # Forward outputs to the parent
+    set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
+    set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
+  else()
+    file(RELATIVE_PATH MATTER_FILE_PATH "${CHIP_ROOT}" ${ARG_INPUT})
 
-        file(MAKE_DIRECTORY "${GEN_FOLDER}")
-        file(GENERATE
-            OUTPUT "${GEN_FOLDER}/expected.outputs"
-            CONTENT "${OUTPUT_AS_NEWLINES}"
-        )
-
-
-        set(OUT_NAMES)
-        foreach(NAME IN LISTS GENERATED_PATHS)
-            list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
-        endforeach()
-
-        # Python is expected to be in the path
-        find_package(Python3 REQUIRED)
-        add_custom_command(
-            OUTPUT ${OUT_NAMES}
-            COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/codegen.py"
-            ARGS "--generator" "${ARG_GENERATOR}"
-                 "--output-dir" "${GEN_FOLDER}"
-                 "--expected-outputs" "${GEN_FOLDER}/expected.outputs"
-                 "${ARG_INPUT}"
-            DEPENDS
-                "${ARG_INPUT}"
-            VERBATIM
-        )
-
-        add_custom_target(${TARGET_NAME} DEPENDS "${OUT_NAMES}")
-
-        # Forward outputs to the parent
-        set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
-        set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
-    else()
-        file(RELATIVE_PATH MATTER_FILE_PATH "${CHIP_ROOT}" ${ARG_INPUT})
-
-        # Removes the trailing file extension to get something like:
-        string(REGEX REPLACE "\.matter$" "" CODEGEN_DIR_PATH "${MATTER_FILE_PATH}")
+    # Removes the trailing file extension to get something like:
+    string(REGEX REPLACE "\.matter$" "" CODEGEN_DIR_PATH "${MATTER_FILE_PATH}")
 
 
-        # Build the final location within the pregen directory
-        set(GEN_FOLDER "${CHIP_CODEGEN_PREGEN_DIR}/${CODEGEN_DIR_PATH}/codegen/${ARG_GENERATOR}")
+    # Build the final location within the pregen directory
+    set(GEN_FOLDER "${CHIP_CODEGEN_PREGEN_DIR}/${CODEGEN_DIR_PATH}/codegen/${ARG_GENERATOR}")
 
-        # Here we have ${CHIP_CODEGEN_PREGEN_DIR}
-        set(OUT_NAMES)
-        foreach(NAME IN LISTS GENERATED_PATHS)
-            list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
-        endforeach()
+    # Here we have ${CHIP_CODEGEN_PREGEN_DIR}
+    set(OUT_NAMES)
+    foreach(NAME IN LISTS GENERATED_PATHS)
+      list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
+    endforeach()
 
 
-        set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
-        set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
+    set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
+    set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
 
-        # allow adding dependencies to a phony target since no codegen is done
-        add_custom_target(${TARGET_NAME})
-    endif()
+    # allow adding dependencies to a phony target since no codegen is done
+    add_custom_target(${TARGET_NAME})
+  endif()
 endfunction()
 
 # Run chip code generation using zap
@@ -131,105 +131,105 @@ endfunction()
 #                  automatically injected to simplify usage.
 #
 function(chip_zapgen TARGET_NAME)
-    cmake_parse_arguments(ARG
-         ""
-         "INPUT;GENERATOR;OUTPUT_PATH;OUTPUT_FILES;ZCL_PATH"
-         "OUTPUTS"
-         ${ARGN}
+  cmake_parse_arguments(ARG
+    ""
+    "INPUT;GENERATOR;OUTPUT_PATH;OUTPUT_FILES;ZCL_PATH"
+    "OUTPUTS"
+    ${ARGN}
+  )
+
+  set(CHIP_CODEGEN_PREGEN_DIR "" CACHE PATH "Pre-generated directory to use instead of compile-time code generation.")
+
+  if("${CHIP_CODEGEN_PREGEN_DIR}" STREQUAL "")
+    set(GEN_FOLDER "${CMAKE_BINARY_DIR}/gen/${TARGET_NAME}/zapgen/${ARG_GENERATOR}")
+
+    string(REPLACE ";" "\n" OUTPUT_AS_NEWLINES "${ARG_OUTPUTS}")
+
+    file(MAKE_DIRECTORY "${GEN_FOLDER}")
+    file(GENERATE
+      OUTPUT "${GEN_FOLDER}/expected.outputs"
+      CONTENT "${OUTPUT_AS_NEWLINES}"
     )
 
-    set(CHIP_CODEGEN_PREGEN_DIR "" CACHE PATH "Pre-generated directory to use instead of compile-time code generation.")
+    set(OUT_NAMES)
+    foreach(NAME IN LISTS ARG_OUTPUTS)
+      list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
+    endforeach()
 
-    if("${CHIP_CODEGEN_PREGEN_DIR}" STREQUAL "")
-        set(GEN_FOLDER "${CMAKE_BINARY_DIR}/gen/${TARGET_NAME}/zapgen/${ARG_GENERATOR}")
+    if("${ARG_GENERATOR}" STREQUAL "app-templates")
+      set(TEMPLATE_PATH "${CHIP_ROOT}/src/app/zap-templates/app-templates.json")
 
-        string(REPLACE ";" "\n" OUTPUT_AS_NEWLINES "${ARG_OUTPUTS}")
-
-        file(MAKE_DIRECTORY "${GEN_FOLDER}")
-        file(GENERATE
-            OUTPUT "${GEN_FOLDER}/expected.outputs"
-            CONTENT "${OUTPUT_AS_NEWLINES}"
-        )
-
-        set(OUT_NAMES)
-        foreach(NAME IN LISTS ARG_OUTPUTS)
-            list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
-        endforeach()
-
-        if("${ARG_GENERATOR}" STREQUAL "app-templates")
-            SET(TEMPLATE_PATH "${CHIP_ROOT}/src/app/zap-templates/app-templates.json")
-
-            SET(EXTRA_DEPENDENCIES
-                "${CHIP_ROOT}/src/app/zap-templates/partials/header.zapt"
-                "${CHIP_ROOT}/src/app/zap-templates/templates/app/access.zapt"
-                "${CHIP_ROOT}/src/app/zap-templates/templates/app/endpoint_config.zapt"
-                "${CHIP_ROOT}/src/app/zap-templates/templates/app/gen_config.zapt"
-                "${CHIP_ROOT}/src/app/zap-templates/templates/app/im-cluster-command-handler.zapt"
-           )
-           SET(OUTPUT_SUBDIR "zap-generated")
-        else()
-            message(SEND_ERROR "Unsupported zap generator: ${ARG_GENERATOR}")
-        endif()
-
-        set(ZAPGEN_ARGS
-            "--no-prettify-output"
-            "--templates" "${TEMPLATE_PATH}"
-            "--output-dir" "${GEN_FOLDER}/${OUTPUT_SUBDIR}"
-            "--lock-file" "${CMAKE_BINARY_DIR}/zap_gen.lock"
-            "--parallel"
-            "${ARG_INPUT}"
-        )
-
-        # Optional ZCL path for zapgen:
-        # - If ZCL_PATH is passed, use it.
-        # - If CHIP_ENABLE_ZCL_ARG is ON, use default path.
-        # - Otherwise, skip --zcl to preserve default behavior.
-        if(ARG_ZCL_PATH)
-            list(APPEND ZAPGEN_ARGS "--zcl" "${ARG_ZCL_PATH}")
-        elseif(CHIP_ENABLE_ZCL_ARG)
-            list(APPEND ZAPGEN_ARGS "--zcl" "${CHIP_ROOT}/src/app/zap-templates/zcl/zcl.json")
-        endif()
-
-        # Python is expected to be in the path
-        # Forcing a call to find find_package here as ${Python3_EXECUTABLE} would be used
-        find_package(Python3 REQUIRED)
-
-        add_custom_command(
-            OUTPUT ${OUT_NAMES}
-            COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/tools/zap/generate.py"
-            ARGS ${ZAPGEN_ARGS}
-            DEPENDS
-                "${ARG_INPUT}"
-                ${EXTRA_DEPENDENCIES}
-            VERBATIM
-        )
-
-        add_custom_target(${TARGET_NAME} DEPENDS "${OUT_NAMES}")
-
-        # Forward outputs to the parent
-        set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
-        set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
+      set(EXTRA_DEPENDENCIES
+        "${CHIP_ROOT}/src/app/zap-templates/partials/header.zapt"
+        "${CHIP_ROOT}/src/app/zap-templates/templates/app/access.zapt"
+        "${CHIP_ROOT}/src/app/zap-templates/templates/app/endpoint_config.zapt"
+        "${CHIP_ROOT}/src/app/zap-templates/templates/app/gen_config.zapt"
+        "${CHIP_ROOT}/src/app/zap-templates/templates/app/im-cluster-command-handler.zapt"
+      )
+      set(OUTPUT_SUBDIR "zap-generated")
     else()
-        # Gets a path such as:
-        file(RELATIVE_PATH MATTER_FILE_PATH "${CHIP_ROOT}" ${ARG_INPUT})
-
-        # Removes the trailing file extension to get something like:
-        string(REGEX REPLACE "\.zap$" "" CODEGEN_DIR_PATH "${MATTER_FILE_PATH}")
-
-        # Build the final location within the pregen directory
-        set(GEN_FOLDER "${CHIP_CODEGEN_PREGEN_DIR}/${CODEGEN_DIR_PATH}/zap/${ARG_GENERATOR}")
-
-        # Here we have ${CHIP_CODEGEN_PREGEN_DIR}
-        set(OUT_NAMES)
-        foreach(NAME IN LISTS ARG_OUTPUTS)
-            list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
-        endforeach()
-
-
-        set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
-        set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
-
-        # allow adding dependencies to a phony target since no codegen is done
-        add_custom_target(${TARGET_NAME})
+      message(SEND_ERROR "Unsupported zap generator: ${ARG_GENERATOR}")
     endif()
+
+    set(ZAPGEN_ARGS
+      "--no-prettify-output"
+      "--templates" "${TEMPLATE_PATH}"
+      "--output-dir" "${GEN_FOLDER}/${OUTPUT_SUBDIR}"
+      "--lock-file" "${CMAKE_BINARY_DIR}/zap_gen.lock"
+      "--parallel"
+      "${ARG_INPUT}"
+    )
+
+    # Optional ZCL path for zapgen:
+    # - If ZCL_PATH is passed, use it.
+    # - If CHIP_ENABLE_ZCL_ARG is ON, use default path.
+    # - Otherwise, skip --zcl to preserve default behavior.
+    if(ARG_ZCL_PATH)
+      list(APPEND ZAPGEN_ARGS "--zcl" "${ARG_ZCL_PATH}")
+    elseif(CHIP_ENABLE_ZCL_ARG)
+      list(APPEND ZAPGEN_ARGS "--zcl" "${CHIP_ROOT}/src/app/zap-templates/zcl/zcl.json")
+    endif()
+
+    # Python is expected to be in the path
+    # Forcing a call to find find_package here as ${Python3_EXECUTABLE} would be used
+    find_package(Python3 REQUIRED)
+
+    add_custom_command(
+      OUTPUT ${OUT_NAMES}
+      COMMAND "${Python3_EXECUTABLE}" -X utf8 "${CHIP_ROOT}/scripts/tools/zap/generate.py"
+      ARGS ${ZAPGEN_ARGS}
+      DEPENDS
+        "${ARG_INPUT}"
+        ${EXTRA_DEPENDENCIES}
+      VERBATIM
+    )
+
+    add_custom_target(${TARGET_NAME} DEPENDS "${OUT_NAMES}")
+
+    # Forward outputs to the parent
+    set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
+    set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
+  else()
+    # Gets a path such as:
+    file(RELATIVE_PATH MATTER_FILE_PATH "${CHIP_ROOT}" ${ARG_INPUT})
+
+    # Removes the trailing file extension to get something like:
+    string(REGEX REPLACE "\.zap$" "" CODEGEN_DIR_PATH "${MATTER_FILE_PATH}")
+
+    # Build the final location within the pregen directory
+    set(GEN_FOLDER "${CHIP_CODEGEN_PREGEN_DIR}/${CODEGEN_DIR_PATH}/zap/${ARG_GENERATOR}")
+
+    # Here we have ${CHIP_CODEGEN_PREGEN_DIR}
+    set(OUT_NAMES)
+    foreach(NAME IN LISTS ARG_OUTPUTS)
+      list(APPEND OUT_NAMES "${GEN_FOLDER}/${NAME}")
+    endforeach()
+
+
+    set(${ARG_OUTPUT_FILES} "${OUT_NAMES}" PARENT_SCOPE)
+    set(${ARG_OUTPUT_PATH} "${GEN_FOLDER}" PARENT_SCOPE)
+
+    # allow adding dependencies to a phony target since no codegen is done
+    add_custom_target(${TARGET_NAME})
+  endif()
 endfunction()
