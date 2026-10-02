@@ -16,7 +16,7 @@ manifest:
       remote: ncs
       path: modules/lib/matter
       repo-path: sdk-connectedhomeip
-      revision: ncs-matter-preview-nrf7120-branch 
+      revision: 65d3380f26d5d4848179b7af5caf64e3514104c9
       submodules:
         - name: nlio
           path: third_party/nlio/repo
