@@ -23,6 +23,32 @@
 	};
 };
 
+&pwm_led1 {
+	pwms = <&pwm20 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+};
+
+&pwm20 {
+	status = "okay";
+	pinctrl-0 = <&pwm_default>;
+	pinctrl-1 = <&pwm_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pinctrl {
+	pwm_default: pwm_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT1, 4, 9)>;
+		};
+	};
+
+	pwm_sleep: pwm_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT1, 4, 9)>;
+			low-power-enable;
+		};
+	};
+};
+
 // TODO: gpio4 has no gpiote instance assigned in the dtsi file
 &gpio4 {
 	gpiote-instance = <&gpiote20>;
