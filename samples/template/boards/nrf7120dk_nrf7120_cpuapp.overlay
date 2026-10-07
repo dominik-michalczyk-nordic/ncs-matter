@@ -1,0 +1,28 @@
+/*
+ * Copyright (c) 2026 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+ */
+
+#include <nrf7120_cpuapp_partitions.dtsi>
+
+/ {
+	chosen {
+		zephyr,entropy = &psa_rng;
+		// TODO: MRAM is not chosen as the flash controller by default
+		zephyr,flash-controller = &mram_controller;
+	};
+
+	psa_rng: psa-rng {
+		compatible = "zephyr,psa-crypto-rng";
+		status = "okay";
+	};
+};
+
+&wdt31 {
+	status = "okay";
+};
+
+&wifi {
+	status = "okay";
+};

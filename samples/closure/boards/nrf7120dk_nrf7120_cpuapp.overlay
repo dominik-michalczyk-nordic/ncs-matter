@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2026 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+ */
+
+#include <nrf7120_cpuapp_partitions.dtsi>
+
+/ {
+	chosen {
+		zephyr,entropy = &psa_rng;
+		// TODO: MRAM is not chosen as the flash controller by default
+		zephyr,flash-controller = &mram_controller;
+	};
+
+	aliases {
+		pwm-led1 = &pwm_led1;
+	};
+
+	psa_rng: psa-rng {
+		compatible = "zephyr,psa-crypto-rng";
+		status = "okay";
+	};
+};
+
+&pwm_led1 {
+	pwms = <&pwm20 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+};
+
+&pwm20 {
+	status = "okay";
+	pinctrl-0 = <&pwm_default>;
+	pinctrl-1 = <&pwm_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&pinctrl {
+	pwm_default: pwm_default {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT1, 4, 9)>;
+		};
+	};
+
+	pwm_sleep: pwm_sleep {
+		group1 {
+			psels = <NRF_PSEL(PWM_OUT1, 4, 9)>;
+			low-power-enable;
+		};
+	};
+};
+
+// TODO: gpio4 has no gpiote instance assigned in the dtsi file
+&gpio4 {
+	gpiote-instance = <&gpiote20>;
+};
+
+&wdt31 {
+	status = "okay";
+};
+
+&wifi {
+	status = "okay";
+};
